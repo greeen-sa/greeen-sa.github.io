@@ -3,7 +3,13 @@
 .product-photo{position:relative;z-index:1;display:block;width:min(100%,470px);max-height:470px;object-fit:contain;border-radius:12px;mix-blend-mode:multiply;filter:drop-shadow(0 18px 24px #203c2718)}
 @media(max-width:760px){.product-photo{width:min(88%,340px);max-height:300px}.product-stage{min-height:320px}.product-stage .halo{width:270px}}
 
-/* Explicitly remove all former product image/mockup elements */
-.product-stage,.product-photo,.halo,.tube,.tube-cap,.tube-top,.tube-mark,.tube-line,.tube-weight,.tube-bottom,.stage-caption,.product-text-panel{display:none!important;background-image:none!important;}
-.hero{grid-template-columns:minmax(0,1fr)!important;}
-.hero-copy{grid-column:1/-1;}
+
+/* Hero product image — balanced on desktop and mobile */
+.hero{grid-template-columns:minmax(0,1fr) minmax(300px,0.9fr)!important;gap:clamp(18px,4vw,48px);}
+.hero-copy{grid-column:auto;position:relative;z-index:2;}
+.product-stage{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:440px;overflow:hidden;border-radius:22px;background:radial-gradient(ellipse at center,#e1eadf 0%,#d5e2d7 44%,#edf1e8 73%,transparent 74%);}
+.product-stage .halo{position:absolute;display:block;width:min(90%,390px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#d7e7d8 0%,#c2d7c7 50%,#b8cbbd 51%,#e9efe6 72%,transparent 73%);}
+.product-photo{position:relative;z-index:1;display:block;width:min(88%,410px);height:400px;max-height:400px;object-fit:contain;object-position:center;mix-blend-mode:multiply;filter:drop-shadow(0 18px 24px #203c2718);}
+.stage-caption{position:absolute;z-index:2;bottom:16px;display:block;color:#536d60;letter-spacing:1.5px;font-size:10px;direction:ltr;text-align:center;max-width:95%;}
+.stage-caption span{color:#395f4f;font-weight:700;margin-left:8px;}
+@media(max-width:760px){.hero{grid-template-columns:1fr!important;gap:10px;padding:26px 18px 30px;}.product-stage{order:0;min-height:300px;margin:0 0 8px;}.hero-copy{order:1;}.product-stage .halo{width:260px;}.product-photo{width:min(86%,320px);height:260px;max-height:260px;}.stage-caption{bottom:8px;font-size:9px;}.hero h1{font-size:clamp(30px,8vw,36px);}}
