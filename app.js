@@ -1,6 +1,5 @@
 const CONFIG={
  endpoint:'https://script.google.com/macros/s/AKfycbxxBGHE4mZ5iDdplvvaFxVhrHoOMETyRoafgk8iG-DGx9vhY27JgFhc3VHFBO22hu4x0w/exec',
- snapPixelId:'233915bf-25f6-4119-9362-701fe3212185',
  sku:'LUMBAR-GEL-20G',
  receiverSku:'LUMBAR-GEL-20G',
  product:'Lumbar Spine Cooling Gel (20g)',
@@ -10,23 +9,13 @@ const CONFIG={
   3:{label:'3 عبوات — 60g',price:218,quantity:3}
  }
 };
-(function initSnap(){
- if(!CONFIG.snapPixelId)return;
- (function(e,t,n){if(e.snaptr)return;var a=e.snaptr=function(){a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};a.queue=[];var s='script';var r=t.createElement(s);r.async=!0;r.src=n;var u=t.getElementsByTagName(s)[0];u.parentNode.insertBefore(r,u)})(window,document,'https://sc-static.net/scevent.min.js');
- window.snaptr('init',CONFIG.snapPixelId);
- window.snaptr('track','PAGE_VIEW',{item_ids:[CONFIG.sku],item_category:'PERSONAL_CARE'});
- window.snaptr('track','VIEW_CONTENT',{item_ids:[CONFIG.sku],item_category:'PERSONAL_CARE'});
-})();
 const form=document.getElementById('order-form');
 const total=document.getElementById('summary-total');
 const offerSummary=document.getElementById('summary-offer');
 const status=document.getElementById('form-message');
-let checkoutTracked=false;
 function currentOffer(){const code=Number(new FormData(form).get('offer')||1);return {code,...CONFIG.offers[code]};}
 function updateSummary(){const o=currentOffer();offerSummary.textContent=o.label;total.textContent=o.price+' ريال';}
-function trackCheckout(){if(checkoutTracked||!window.snaptr)return;const o=currentOffer();checkoutTracked=true;window.snaptr('track','START_CHECKOUT',{price:o.price,currency:'SAR',item_ids:[CONFIG.sku],item_category:'PERSONAL_CARE',number_items:o.quantity});}
-form.addEventListener('change',()=>{updateSummary();trackCheckout();});
-form.addEventListener('focusin',trackCheckout,{once:true});
+form.addEventListener('change',updateSummary);
 const phoneInput=form.elements.phone;
 const phoneError=document.getElementById('phone-error');
 phoneInput.addEventListener('input',()=>{phoneInput.removeAttribute('aria-invalid');phoneError.textContent='';});
@@ -63,7 +52,6 @@ form.addEventListener('submit',async e=>{
   const body=JSON.stringify(payload);let queued=false;
   if(navigator.sendBeacon){try{queued=navigator.sendBeacon(CONFIG.endpoint,new Blob([body],{type:'text/plain;charset=utf-8'}));}catch(_){}}
   if(!queued){if(navigator.onLine===false)throw new Error('offline');fetch(CONFIG.endpoint,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body}).catch(()=>{});}
-  if(window.snaptr)window.snaptr('track','PURCHASE',{price:o.price,currency:'SAR',transaction_id:tx,item_ids:[CONFIG.sku],item_category:'PERSONAL_CARE',number_items:o.quantity});
   btn.textContent='تم إرسال الطلب ✓';status.textContent='تم إرسال طلبك. سنتواصل معك للتأكيد قبل الشحن.';showSuccess(o);
  }catch(err){btn.disabled=false;btn.textContent='تأكيد الطلب — الدفع عند الاستلام';status.textContent='تعذر إرسال الطلب الآن. تحقق من اتصال الإنترنت وحاول مرة أخرى.';}
 });
