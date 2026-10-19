@@ -9,6 +9,14 @@ const CONFIG={
   3:{label:'3 عبوات — 60g',price:218,quantity:3}
  }
 };
+// Snapchat Pixel: initialize once per page; Purchase fires only after the order request is queued.
+(function initSnapPixel(){
+ const pixelId='233915bf-25f6-4119-9362-701fe3212185';
+ if(window.__lumbarSnapPixelInit)return;window.__lumbarSnapPixelInit=true;
+ (function(w,d,t,u,n,a,m){if(w.snaptr)return;n=w.snaptr=function(){n.handleRequest?n.handleRequest.apply(n,arguments):n.queue.push(arguments)};n.queue=[];a=d.createElement(t);a.async=true;a.src=u;m=d.getElementsByTagName(t)[0];m.parentNode.insertBefore(a,m)})(window,document,'script','https://sc-static.net/scevent.min.js');
+ window.snaptr('init',pixelId);
+ window.snaptr('track','PAGE_VIEW');
+})();
 const form=document.getElementById('order-form');
 const total=document.getElementById('summary-total');
 const offerSummary=document.getElementById('summary-offer');
@@ -52,6 +60,7 @@ form.addEventListener('submit',async e=>{
   const body=JSON.stringify(payload);let queued=false;
   if(navigator.sendBeacon){try{queued=navigator.sendBeacon(CONFIG.endpoint,new Blob([body],{type:'text/plain;charset=utf-8'}));}catch(_){}}
   if(!queued){if(navigator.onLine===false)throw new Error('offline');fetch(CONFIG.endpoint,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body}).catch(()=>{});}
+  if(queued && !window.__lumbarPurchaseTracked){window.__lumbarPurchaseTracked=true;try{if(typeof window.snaptr==='function')window.snaptr('track','PURCHASE',{price:o.price,currency:'SAR',transaction_id:tx});}catch(pixelError){console.warn('Snap Pixel Purchase event failed',pixelError);}}
   btn.textContent='تم إرسال الطلب ✓';status.textContent='تم إرسال طلبك. سنتواصل معك للتأكيد قبل الشحن.';showSuccess(o);
  }catch(err){btn.disabled=false;btn.textContent='تأكيد الطلب — الدفع عند الاستلام';status.textContent='تعذر إرسال الطلب الآن. تحقق من اتصال الإنترنت وحاول مرة أخرى.';}
 });
