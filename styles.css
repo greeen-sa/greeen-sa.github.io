@@ -104,3 +104,38 @@ body{padding-bottom:0}
 @media(max-width:380px){
   .hero-visual{height:clamp(350px,62svh,500px)!important;padding:11px!important}
 }
+
+
+/* Final edge-to-edge hero: artwork touches the gold frame */
+.hero-visual{
+  padding:0!important;
+  border:2px solid #c9a96a!important;
+  background:#171b15!important;
+  box-shadow:0 18px 44px #342a1818!important;
+  overflow:hidden!important;
+}
+.hero-visual:before{display:none!important;content:none!important}
+.hero-image{
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  filter:none!important;
+}
+@media(max-width:760px){
+  .hero-visual{
+    padding:0!important;
+    height:calc(100svh - 145px)!important;
+    max-height:760px!important;
+    min-height:0!important;
+  }
+  .hero-image{
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    object-fit:cover!important;
+    object-position:center center!important;
+  }
+}
