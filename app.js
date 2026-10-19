@@ -59,7 +59,7 @@ form.addEventListener('submit',async e=>{
  try{
   const body=JSON.stringify(payload);let queued=false;
   if(navigator.sendBeacon){try{queued=navigator.sendBeacon(CONFIG.endpoint,new Blob([body],{type:'text/plain;charset=utf-8'}));}catch(_){}}
-  if(!queued){if(navigator.onLine===false)throw new Error('offline');fetch(CONFIG.endpoint,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body}).catch(()=>{});}
+  if(!queued){if(navigator.onLine===false)throw new Error('offline');fetch(CONFIG.endpoint,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body}).catch(()=>{});queued=true;}
   if(queued && !window.__lumbarPurchaseTracked){window.__lumbarPurchaseTracked=true;try{if(typeof window.snaptr==='function')window.snaptr('track','PURCHASE',{price:o.price,currency:'SAR',transaction_id:tx});}catch(pixelError){console.warn('Snap Pixel Purchase event failed',pixelError);}}
   btn.textContent='تم إرسال الطلب ✓';status.textContent='تم إرسال طلبك. سنتواصل معك للتأكيد قبل الشحن.';showSuccess(o);
  }catch(err){btn.disabled=false;btn.textContent='تأكيد الطلب — الدفع عند الاستلام';status.textContent='تعذر إرسال الطلب الآن. تحقق من اتصال الإنترنت وحاول مرة أخرى.';}
