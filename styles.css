@@ -139,3 +139,13 @@ body{padding-bottom:0}
     object-position:center center!important;
   }
 }
+
+
+/* Final fix: frame follows the image's natural ratio; never crop the hero. */
+.hero-visual{display:block!important;position:relative!important;width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;padding:0!important;overflow:visible!important;border:2px solid #c9a96a!important;background:transparent!important;box-shadow:0 18px 44px #342a1818!important}
+.hero-visual:before{display:none!important;content:none!important}
+.hero-image{display:block!important;position:relative!important;width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;object-fit:contain!important;object-position:center!important;filter:none!important}
+.visual-glow{display:none!important}
+.visual-stamp{z-index:3!important}
+@media(max-width:760px){.hero-visual{height:auto!important;min-height:0!important;max-height:none!important;padding:0!important;overflow:visible!important}.hero-image{width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;object-fit:contain!important}}
+.sticky-order.checkout-in-view{display:none!important}
