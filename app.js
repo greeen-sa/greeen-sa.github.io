@@ -65,4 +65,21 @@ form.addEventListener('submit',async e=>{
  }catch(err){btn.disabled=false;btn.textContent='تأكيد الطلب — الدفع عند الاستلام';status.textContent='تعذر إرسال الطلب الآن. تحقق من اتصال الإنترنت وحاول مرة أخرى.';}
 });
 document.addEventListener('click',e=>{const a=e.target.closest('a[href="#order"]');if(!a)return;e.preventDefault();const target=document.getElementById('order');if(target){target.scrollIntoView({behavior:'auto',block:'start'});requestAnimationFrame(()=>target.scrollIntoView({behavior:'auto',block:'start'}));}});
+
+// Hide the floating order link while the checkout section is visible.
+(function manageStickyOrder(){
+ const sticky=document.querySelector('.sticky-order');
+ const checkout=document.querySelector('.offer-section');
+ if(!sticky||!checkout)return;
+ if('IntersectionObserver' in window){
+  const observer=new IntersectionObserver(entries=>{
+   entries.forEach(entry=>sticky.classList.toggle('checkout-in-view',entry.isIntersecting));
+  },{threshold:0.08});
+  observer.observe(checkout);
+ }else{
+  const check=()=>{const r=checkout.getBoundingClientRect();sticky.classList.toggle('checkout-in-view',r.top<window.innerHeight&&r.bottom>0)};
+  window.addEventListener('scroll',check,{passive:true});window.addEventListener('resize',check);check();
+ }
+})();
+
 updateSummary();
